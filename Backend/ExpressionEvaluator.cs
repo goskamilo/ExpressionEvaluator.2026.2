@@ -77,7 +77,7 @@ public static class ExpressionEvaluator
         '(' => 5,
         _ => throw new Exception("Invalid expression."),
     };
-
+    //
     private static bool IsOperator(char item) => item == '^' || item == '*' || item == '/' || item == '+' || item == '-' || item == '(' || item == ')';
 
     private static double EvalutePostfix(string postfix)
