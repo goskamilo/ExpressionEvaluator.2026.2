@@ -1,4 +1,5 @@
 namespace Frontend
+    
 {
     public partial class Form1 : Form
     {
@@ -6,9 +7,6 @@ namespace Frontend
         {
             InitializeComponent();
         }
-
-
-
         private void button17_Click(object sender, EventArgs e)
         {
             txtScreen.Text = "";
@@ -89,7 +87,16 @@ namespace Frontend
 
         private void btnResult_Click(object sender, EventArgs e)
         {
-
+            /*string infix = txtScreen.Text;
+            try
+            {
+                double result = Backend.ExpressionEvaluator.Evalute(infix);
+                txtScreen.Text = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Calculation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }*/
         }
 
         private void btnPabr_Click(object sender, EventArgs e)
@@ -133,5 +140,6 @@ namespace Frontend
             if (txtScreen.Text.Length == 0) txtScreen.Text = "^";
             else txtScreen.Text = txtScreen.Text + "^";
         }
+    
     }
 }
