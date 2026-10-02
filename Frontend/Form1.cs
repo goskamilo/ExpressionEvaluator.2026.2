@@ -1,7 +1,9 @@
-namespace Frontend
-    
-{
-    public partial class Form1 : Form
+
+using Backend;
+
+namespace Frontend { 
+   
+public partial class Form1 : Form
     {
         public Form1()
         {
@@ -86,20 +88,37 @@ namespace Frontend
         }
 
         private void btnResult_Click(object sender, EventArgs e)
-        {
-            /*string infix = txtScreen.Text;
-            try
-            {
-                double result = Backend.ExpressionEvaluator.Evalute(infix);
-                txtScreen.Text = result.ToString();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error: {ex.Message}", "Calculation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }*/
-        }
+    {
+        // Guarda la expresión que aparece en pantalla.
+        string infix = txtScreen.Text;
 
-        private void btnPabr_Click(object sender, EventArgs e)
+        try
+        {
+           
+            // Convierte la coma decimal ingresada por el usuario
+            // en punto para que el Backend pueda procesarla.
+            infix = infix.Replace(',', '.');
+
+            // Envía la expresión completa al Backend.
+            double result = ExpressionEvaluator.Evalute(infix);
+
+            
+            // Convierte el resultado nuevamente a coma
+            // para mostrarlo de la misma forma que lo ingresó el usuario.
+            txtScreen.Text = result.ToString().Replace('.', ',');
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+            $"Error: {ex.Message}",
+            "Calculation Error",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Error
+            );
+        }
+    }
+
+    private void btnPabr_Click(object sender, EventArgs e)
         {
             if (txtScreen.Text.Length == 0) txtScreen.Text = "(";
             else txtScreen.Text = txtScreen.Text + "(";
