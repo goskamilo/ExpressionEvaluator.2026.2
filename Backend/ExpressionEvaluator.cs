@@ -16,7 +16,7 @@ public static class ExpressionEvaluator
         {
             if (IsOperator(item))
             {//Ayuda a separar los números de los operadores, por ejemplo: 2+3*4 se convierte en 2 + 3 * 4
-                if (numero.Length > 0)
+                if (numero.Length > 0) 
                 {
                     posfix += numero + " ";
                     numero = string.Empty;
