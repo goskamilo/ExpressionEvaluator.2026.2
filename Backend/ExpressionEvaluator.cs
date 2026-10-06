@@ -9,19 +9,13 @@ public static class ExpressionEvaluator
         var posfix = string.Empty;
         var stack = new Stack<char>();
 
-        // CAMBIO:
-        // Variable para guardar números de varios dígitos y decimales.
-        // Ejemplo: en vez de procesar 12,5 como '1', '2', ',', '5',
-        // ahora se guarda completo como "12,5".
+        //se utiliza para acumular los números que se van encontrando en la expresión infija y almacena el número completo antes de agregarlo a la expresión postfija.
         var numero = string.Empty;
 
         foreach (var item in infix)
         {
             if (IsOperator(item))
-            {
-                // CAMBIO:
-                // Si antes del operador encontramos un número,
-                // agregamos el número completo al postfijo.
+            {//Ayuda a separar los números de los operadores, por ejemplo: 2+3*4 se convierte en 2 + 3 * 4
                 if (numero.Length > 0)
                 {
                     posfix += numero + " ";
@@ -29,10 +23,7 @@ public static class ExpressionEvaluator
                 }
 
                 if (item == ')')
-                {
-                    // CAMBIO:
-                    // Se verifica que la pila tenga elementos
-                    // para evitar errores con paréntesis incorrectos.
+                {                   
                     if (stack.Count == 0)
                         throw new Exception("Paréntesis incorrectos.");
 
@@ -62,10 +53,7 @@ public static class ExpressionEvaluator
                         }
                         else
                         {
-                            // CAMBIO:
-                            // Se agrega un espacio después del operador
-                            // para separar correctamente los elementos
-                            // de la expresión postfija.
+                            //se vacía la pila hasta que se encuentre un operador con menor prioridad o hasta que la pila esté vacía, y se agregan los operadores a la expresión postfija.
                             posfix += stack.Pop() + " ";
                             stack.Push(item);
                         }
@@ -74,16 +62,7 @@ public static class ExpressionEvaluator
             }
             else
             {
-                // CAMBIO:
-                // Ahora los caracteres numéricos se acumulan.
-                // Esto permite números como:
-                // 2
-                // 25
-                // 125
-                // 12,5
-                // 100,75
-
-                // También permitimos punto o coma decimal.
+                //se toma en cuenta que los números pueden tener más de un dígito y pueden incluir comas o puntos decimales, por lo que se acumulan en la variable "numero" hasta que se encuentra un operador o un espacio.
                 if (char.IsDigit(item) || item == ',' || item == '.')
                 {
                     numero += item;
@@ -93,25 +72,15 @@ public static class ExpressionEvaluator
                     throw new Exception("Carácter no válido.");
                 }
             }
-        }
-
-        // CAMBIO:
-        // Si la expresión termina en un número,
-        // debemos agregarlo al postfijo antes de vaciar la pila.
+        }     
         if (numero.Length > 0)
         {
             posfix += numero + " ";
         }
-
-        // CAMBIO:
-        // Se reemplaza el do-while original por while.
-        // El do-while hacía Pop() incluso cuando la pila estaba vacía.
         while (stack.Count != 0)
         {
             var operador = stack.Pop();
-
-            // Si queda un "(" significa que los paréntesis
-            // de la expresión estaban incorrectos.
+            //si se encuentra un paréntesis de apertura en la pila, significa que hay un error en la expresión infija, por lo que se lanza una excepción.
             if (operador == '(')
                 throw new Exception("Paréntesis incorrectos.");
 
@@ -155,31 +124,14 @@ public static class ExpressionEvaluator
     private static double EvalutePostfix(string postfix)
     {
         var stack = new Stack<double>();
-
-        // CAMBIO:
-        // Antes se recorría:
-        //
-        // foreach (var item in postfix)
-        //
-        // Eso procesa carácter por carácter.
-        //
-        // Ahora utilizamos Split(' ') para procesar cada número
-        // completo.
-        //
-        // Por ejemplo:
-        // "12 5 +" produce:
-        // "12"
-        // "5"
-        // "+"
+        //separa los valores y operadores en la expresión postfija utilizando el espacio como delimitador, y elimina cualquier entrada vacía que pueda haber quedado después de la división.
         var elementos = postfix.Split(
             ' ',
             StringSplitOptions.RemoveEmptyEntries
         );
 
         foreach (var elemento in elementos)
-        {
-            // Si solamente tenemos un carácter y ese carácter
-            // es un operador, realizamos la operación.
+        {// se verifica si el elemento es un operador o un número. Si es un operador, se realizan las operaciones correspondientes utilizando los dos últimos números en la pila. Si es un número, se convierte a double y se agrega a la pila.
             if (elemento.Length == 1 && IsOperator(elemento[0]))
             {
                 // Se requieren dos números para realizar una operación.
@@ -192,22 +144,9 @@ public static class ExpressionEvaluator
                 stack.Push(Calculate(ope1, ope2, elemento[0]));
             }
             else
-            {
-                // CAMBIO IMPORTANTE:
-                // Reemplazamos la coma por punto antes de convertir.
-                //
-                // Ejemplo:
-                // "12,5" -> "12.5"
+            {   //se reemplaza la coma por un punto para que el número pueda ser convertido a double correctamente, ya que en algunos países se utiliza la coma como separador decimal.
                 string numero = elemento.Replace(',', '.');
-
-                // CAMBIO:
-                // Ya no utilizamos:
-                //
-                // char.GetNumericValue(item)
-                //
-                // porque solamente puede trabajar con un carácter.
-                //
-                // Ahora convertimos el número completo a double.
+                //se pasa directamente a un double sin usar el char.IsDigit, ya que el número puede contener un punto decimal y no se consideraría un dígito. Además, se utiliza la cultura invariante para que el punto decimal sea reconocido correctamente.
                 if (double.TryParse(
                     numero,
                     System.Globalization.NumberStyles.Float,
@@ -223,8 +162,6 @@ public static class ExpressionEvaluator
             }
         }
 
-        // Al finalizar solamente debe existir
-        // un resultado en la pila.
         if (stack.Count != 1)
             throw new Exception("Expresión incorrecta.");
 

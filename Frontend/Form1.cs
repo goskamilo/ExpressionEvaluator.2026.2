@@ -12,7 +12,7 @@ public partial class Form1 : Form
         private void button17_Click(object sender, EventArgs e)
         {
             txtScreen.Text = "";
-            txtScreen.Text = txtScreen.Text + "0";
+            txtScreen.Text = txtScreen.Text + " ";
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -97,7 +97,7 @@ public partial class Form1 : Form
            
             // Convierte la coma decimal ingresada por el usuario
             // en punto para que el Backend pueda procesarla.
-            infix = infix.Replace(',', '.');
+            infix = infix.Replace  (',', '.');
 
             // Envía la expresión completa al Backend.
             double result = ExpressionEvaluator.Evalute(infix);
@@ -105,7 +105,7 @@ public partial class Form1 : Form
             
             // Convierte el resultado nuevamente a coma
             // para mostrarlo de la misma forma que lo ingresó el usuario.
-            txtScreen.Text = result.ToString().Replace('.', ',');
+            txtScreen.Text = result.ToString("N5")/*.Replace('.', ',')*/  ;
         }
         catch (Exception ex)
         {
