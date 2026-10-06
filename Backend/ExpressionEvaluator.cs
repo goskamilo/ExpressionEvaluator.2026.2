@@ -37,7 +37,7 @@ public static class ExpressionEvaluator
                             throw new Exception("Wrong expression.");
 
                         ope = stack.Pop();
-                    }
+                    } 
                 }
                 else
                 {
