@@ -25,7 +25,7 @@ public static class ExpressionEvaluator
                 if (item == ')')
                 {                   
                     if (stack.Count == 0)
-                        throw new Exception("Paréntesis incorrectos.");
+                        throw new Exception("Wrong expression.");
 
                     var ope = stack.Pop();
 
@@ -34,7 +34,7 @@ public static class ExpressionEvaluator
                         posfix += ope + " ";
 
                         if (stack.Count == 0)
-                            throw new Exception("Paréntesis incorrectos.");
+                            throw new Exception("Wrong expression.");
 
                         ope = stack.Pop();
                     }
@@ -69,7 +69,7 @@ public static class ExpressionEvaluator
                 }
                 else if (item != ' ')
                 {
-                    throw new Exception("Carácter no válido.");
+                    throw new Exception("Invalid character.");
                 }
             }
         }     
@@ -82,7 +82,7 @@ public static class ExpressionEvaluator
             var operador = stack.Pop();
             //si se encuentra un paréntesis de apertura en la pila, significa que hay un error en la expresión infija, por lo que se lanza una excepción.
             if (operador == '(')
-                throw new Exception("Paréntesis incorrectos.");
+                throw new Exception("Wrong expression.");
 
             posfix += operador + " ";
         }
@@ -136,7 +136,7 @@ public static class ExpressionEvaluator
             {
                 // Se requieren dos números para realizar una operación.
                 if (stack.Count < 2)
-                    throw new Exception("Expresión incorrecta.");
+                    throw new Exception("Wrong expression.");
 
                 var ope2 = stack.Pop();
                 var ope1 = stack.Pop();
@@ -157,13 +157,13 @@ public static class ExpressionEvaluator
                 }
                 else
                 {
-                    throw new Exception("Número no válido.");
+                    throw new Exception("Invalid number.");
                 }
             }
         }
 
         if (stack.Count != 1)
-            throw new Exception("Expresión incorrecta.");
+            throw new Exception("Wrong expression.");
 
         return stack.Pop();
     }
